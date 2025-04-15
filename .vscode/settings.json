@@ -1,4 +1,5 @@
 {
   "dartimportsorter.sortOnSave": true,
   "editor.formatOnSave": true,
+  "dart.flutterSdkPath": ".fvm/versions/3.29.2"
 }

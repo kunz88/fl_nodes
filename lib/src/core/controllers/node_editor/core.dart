@@ -1,9 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
-
-import 'package:uuid/uuid.dart';
-
 import 'package:fl_nodes/fl_nodes.dart';
 import 'package:fl_nodes/src/constants.dart';
 import 'package:fl_nodes/src/core/controllers/node_editor/history.dart';
@@ -12,10 +8,11 @@ import 'package:fl_nodes/src/core/models/events.dart';
 import 'package:fl_nodes/src/core/utils/renderbox.dart';
 import 'package:fl_nodes/src/core/utils/snackbar.dart';
 import 'package:fl_nodes/src/core/utils/spatial_hash_grid.dart';
+import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../models/config.dart';
 import '../../models/entities.dart';
-
 import 'clipboard.dart';
 import 'event_bus.dart';
 import 'runner.dart';
@@ -641,10 +638,8 @@ class FlNodeEditorController {
         final unboundOffset = _unboundNodeOffsets[id]!;
 
         node.offset = Offset(
-          (unboundOffset.dx / config.snapToGridSize).round() *
-              config.snapToGridSize,
-          (unboundOffset.dy / config.snapToGridSize).round() *
-              config.snapToGridSize,
+          (unboundOffset.dx / config.snapToGridSize) * config.snapToGridSize,
+          (unboundOffset.dy / config.snapToGridSize) * config.snapToGridSize,
         );
       } else {
         node.offset += delta / _viewportZoom;
