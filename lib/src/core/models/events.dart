@@ -1,9 +1,7 @@
+import 'package:fl_nodes/src/core/controllers/node_editor/project.dart';
 import 'package:flutter/material.dart';
 
-import 'package:fl_nodes/src/core/controllers/node_editor/project.dart';
-
 import '../controllers/node_editor/core.dart';
-
 import 'entities.dart';
 
 /// Events are used to communicate between the [FlNodeEditorController] and the Widgets composing the Node Editor.
@@ -109,7 +107,6 @@ final class DragSelectionEvent extends NodeEditorEvent {
         'nodeIds': nodeIds.toList(),
         'delta': [delta.dx, delta.dy],
       };
-
   factory DragSelectionEvent.fromJson(Map<String, dynamic> json) {
     return DragSelectionEvent(
       (json['nodeIds'] as List).cast<String>().toSet(),

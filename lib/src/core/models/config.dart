@@ -31,7 +31,7 @@ class FlNodeEditorConfig {
     this.enableKineticScrolling = true,
     this.enableAutoScrolling = true,
     this.enableAreaSelection = true,
-    this.enableSnapToGrid = true,
+    this.enableSnapToGrid = false,
     this.snapToGridSize = 64.0,
     this.enableAutoPlacement = false,
   });

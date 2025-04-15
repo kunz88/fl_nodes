@@ -1,7 +1,6 @@
 import '../../../constants.dart';
 import '../../models/events.dart';
 import '../../utils/stack.dart';
-
 import 'core.dart';
 
 /// A class that manages the undo and redo history of the node editor.
@@ -80,7 +79,12 @@ class FlNodeEditorHistory {
     try {
       if (event is DragSelectionEvent) {
         controller.selectNodesById(event.nodeIds, isHandled: true);
-        controller.dragSelection(-event.delta, eventId: event.id);
+        controller.dragSelection(
+          -event.delta,
+          eventId: event.id,
+          isWorldDelta: true,
+          resetUnboundOffset: true,
+        );
         controller.clearSelection();
       } else if (event is AddNodeEvent) {
         controller.removeNode(event.node.id, eventId: event.id);
@@ -107,7 +111,12 @@ class FlNodeEditorHistory {
     try {
       if (event is DragSelectionEvent) {
         controller.selectNodesById(event.nodeIds, isHandled: true);
-        controller.dragSelection(event.delta, eventId: event.id);
+        controller.dragSelection(
+          event.delta,
+          eventId: event.id,
+          isWorldDelta: true,
+          resetUnboundOffset: true,
+        );
         controller.clearSelection();
       } else if (event is AddNodeEvent) {
         controller.addNodeFromExisting(event.node, eventId: event.id);
