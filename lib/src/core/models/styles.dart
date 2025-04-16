@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-
 import 'package:fl_nodes/src/core/models/entities.dart';
+import 'package:flutter/material.dart';
 
 class FlGridStyle {
   final double gridSpacingX;
@@ -15,9 +14,9 @@ class FlGridStyle {
     this.gridSpacingX = 64.0,
     this.gridSpacingY = 64.0,
     this.lineWidth = 1.0,
-    this.lineColor = const Color.fromARGB(64, 100, 100, 100),
-    this.intersectionColor = const Color.fromARGB(128, 150, 150, 150),
-    this.intersectionRadius = 2,
+    this.lineColor = const Color.fromARGB(0, 50, 47, 53),
+    this.intersectionColor = const Color(0xFF322F35),
+    this.intersectionRadius = 1,
     this.showGrid = true,
   });
 
@@ -87,19 +86,20 @@ typedef FlLinkStyleBuilder = FlLinkStyle Function(LinkState style);
 FlLinkStyle defaultLinkStyle(LinkState state) {
   return const FlLinkStyle(
     gradient: LinearGradient(
-      colors: [Colors.blue, Colors.blue],
+      colors: [Color(0xFF29303E), Color(0xFF29303E)],
       begin: Alignment.centerLeft,
       end: Alignment.centerRight,
     ),
     lineWidth: 2.0,
     drawMode: FlLinkDrawMode.solid,
-    curveType: FlLinkCurveType.bezier,
+    curveType: FlLinkCurveType.ninetyDegree,
   );
 }
 
 enum FlPortShape {
   circle,
   triangle,
+  square,
 }
 
 class FlPortStyle {
@@ -108,7 +108,7 @@ class FlPortStyle {
   final FlLinkStyleBuilder linkStyleBuilder;
 
   const FlPortStyle({
-    this.shape = FlPortShape.circle,
+    this.shape = FlPortShape.square,
     this.color = Colors.blue,
     this.linkStyleBuilder = defaultLinkStyle,
   });
@@ -126,7 +126,7 @@ class FlPortStyle {
   }
 }
 
-class FlFieldStyle {
+/* class FlFieldStyle {
   final BoxDecoration decoration;
   final EdgeInsetsGeometry padding;
 
@@ -147,19 +147,23 @@ class FlFieldStyle {
       padding: padding ?? this.padding,
     );
   }
-}
+} */
 
 class FlNodeHeaderStyle {
   final EdgeInsets padding;
   final BoxDecoration decoration;
   final TextStyle textStyle;
-  final IconData? icon;
+  final IconData? iconAvatar;
+  final Color iconColor;
+  final Color backgroundColorIconContainer;
 
   const FlNodeHeaderStyle({
     required this.padding,
     required this.decoration,
     required this.textStyle,
-    required this.icon,
+    required this.iconAvatar,
+    required this.iconColor,
+    required this.backgroundColorIconContainer,
   });
 
   FlNodeHeaderStyle copyWith({
@@ -172,7 +176,9 @@ class FlNodeHeaderStyle {
       padding: padding ?? this.padding,
       decoration: decoration ?? this.decoration,
       textStyle: textStyle ?? this.textStyle,
-      icon: icon ?? this.icon,
+      iconAvatar: icon ?? iconAvatar,
+      iconColor: iconColor,
+      backgroundColorIconContainer: backgroundColorIconContainer,
     );
   }
 }
@@ -181,20 +187,25 @@ typedef FlNodeHeaderStyleBuilder = FlNodeHeaderStyle Function(NodeState style);
 
 FlNodeHeaderStyle defaultNodeHeaderStyle(NodeState state) {
   return FlNodeHeaderStyle(
+    iconColor: Colors.white,
+    backgroundColorIconContainer: const Color.fromRGBO(255, 255, 255, 0.16),
     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-    decoration: const BoxDecoration(
-      color: Colors.blue,
-      borderRadius: BorderRadius.only(
+    decoration: BoxDecoration(
+      color: const Color(0xFF322F35),
+      borderRadius: const BorderRadius.only(
         topLeft: Radius.circular(7),
         topRight: Radius.circular(7),
       ),
+      border: Border.all(color: const Color(0xffDDE0E1), width: 1),
     ),
     textStyle: const TextStyle(
       color: Colors.white,
       fontSize: 16,
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.15,
+      height: 1.4,
     ),
-    icon: state.isCollapsed ? Icons.expand_more : Icons.expand_less,
+    iconAvatar: Icons.add,
   );
 }
 

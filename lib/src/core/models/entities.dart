@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
-
-import 'package:uuid/uuid.dart';
-
 import 'package:fl_nodes/fl_nodes.dart';
 import 'package:fl_nodes/src/core/controllers/node_editor/project.dart';
 import 'package:fl_nodes/src/core/controllers/node_editor/runner.dart';
+import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 typedef FromTo = ({String from, String to, String fromPort, String toPort});
 
@@ -230,7 +228,7 @@ typedef EditorBuilder = Widget Function(
 class FieldPrototype {
   final String idName;
   final String displayName;
-  final FlFieldStyle style;
+/*   final FlFieldStyle style; */
   final Type dataType;
   final dynamic defaultData;
   final Widget Function(dynamic data) visualizerBuilder;
@@ -240,7 +238,7 @@ class FieldPrototype {
   FieldPrototype({
     required this.idName,
     this.displayName = '',
-    this.style = const FlFieldStyle(),
+    /*    this.style = const FlFieldStyle(), */
     this.dataType = dynamic,
     this.defaultData,
     required this.visualizerBuilder,

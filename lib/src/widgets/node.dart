@@ -1,22 +1,19 @@
 import 'dart:async';
 
+import 'package:fl_nodes/fl_nodes.dart';
+import 'package:fl_nodes/src/utils/context_menu.dart';
+import 'package:fl_nodes/src/utils/improved_listener.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-
 import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:os_detect/os_detect.dart' as os_detect;
-
-import 'package:fl_nodes/fl_nodes.dart';
-import 'package:fl_nodes/src/utils/context_menu.dart';
-import 'package:fl_nodes/src/utils/improved_listener.dart';
 
 import '../constants.dart';
 import '../core/models/entities.dart';
 import '../core/utils/renderbox.dart';
-
 import 'builders.dart';
 
 typedef _TempLink = ({String nodeId, String portId});
@@ -66,12 +63,14 @@ class _NodeWidgetState extends State<NodeWidget> {
 
   double get viewportZoom => widget.controller.viewportZoom;
   Offset get viewportOffset => widget.controller.viewportOffset;
+  StreamSubscription<NodeEditorEvent>? _eventBus;
 
   @override
   void initState() {
     super.initState();
 
-    widget.controller.eventBus.events.listen(_handleControllerEvents);
+    _eventBus =
+        widget.controller.eventBus.events.listen(_handleControllerEvents);
 
     widget.node.builtStyle =
         widget.node.prototype.styleBuilder(widget.node.state);
@@ -90,6 +89,7 @@ class _NodeWidgetState extends State<NodeWidget> {
   @override
   void dispose() {
     _edgeTimer?.cancel();
+    _eventBus?.cancel();
     super.dispose();
   }
 
@@ -241,7 +241,7 @@ class _NodeWidgetState extends State<NodeWidget> {
   /// UPDATED _buildField:
   /// This method now always wraps the field content in a GestureDetector that
   /// handles tap events—even when a custom fieldBuilder is provided.
-  Widget _buildField(FieldInstance field) {
+/*   Widget _buildField(FieldInstance field) { 
     if (widget.node.state.isCollapsed) {
       return SizedBox(key: field.key, height: 0, width: 0);
     }
@@ -269,8 +269,8 @@ class _NodeWidgetState extends State<NodeWidget> {
 
     // Wrap the content with a GestureDetector to ensure tap handling.
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: GestureDetector(
+      padding = const EdgeInsets.only(bottom: 8),
+      child = GestureDetector(
         onTapDown: (details) {
           if (field.prototype.onVisualizerTap != null) {
             field.prototype.onVisualizerTap!(field.data, (dynamic data) {
@@ -288,7 +288,7 @@ class _NodeWidgetState extends State<NodeWidget> {
         child: fieldContent,
       ),
     );
-  }
+  }*/
 
   Widget _buildPort(PortInstance port) {
     if (widget.node.state.isCollapsed) {
@@ -308,8 +308,13 @@ class _NodeWidgetState extends State<NodeWidget> {
       children: [
         Flexible(
           child: Text(
-            port.prototype.displayName,
-            style: const TextStyle(color: Colors.white70, fontSize: 13),
+            port.prototype.displayName.toLowerCase(),
+            style: const TextStyle(
+              color: Color(0xff545964),
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              fontFamily: 'Roboto',
+            ),
             overflow: TextOverflow.ellipsis,
             textAlign: isInput ? TextAlign.left : TextAlign.right,
           ),
@@ -325,33 +330,41 @@ class _NodeWidgetState extends State<NodeWidget> {
     final outPorts = widget.node.ports.values
         .where((port) => port.prototype.direction == PortDirection.output)
         .toList();
-    final fields = widget.node.fields.values.toList();
+/*     final fields = widget.node.fields.values.toList(); */
 
     return [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: inPorts.map((port) => _buildPort(port)).toList(),
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: const Color(0xffDDE0E1), width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: inPorts.map((port) => _buildPort(port)).toList(),
+              ),
             ),
-          ),
-          const SizedBox(width: 16),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: outPorts.map((port) => _buildPort(port)).toList(),
+            const SizedBox(width: 16),
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: outPorts.map((port) => _buildPort(port)).toList(),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-      if (fields.isNotEmpty) const SizedBox(height: 16),
-      ...fields.map((field) => _buildField(field)),
+      /*    if (fields.isNotEmpty) const SizedBox(height: 16),
+      ...fields.map((field) => _buildField(field)), */
     ];
   }
 
-  void _showFieldEditorOverlay(
+/*   void _showFieldEditorOverlay(
     String nodeId,
     FieldInstance field,
     TapDownDetails details,
@@ -393,7 +406,7 @@ class _NodeWidgetState extends State<NodeWidget> {
 
     overlay.insert(overlayEntry);
   }
-
+ */
   Widget controlsWrapper(Widget child) {
     return os_detect.isAndroid || os_detect.isIOS
         ? GestureDetector(
@@ -707,7 +720,19 @@ class _NodeWidgetState extends State<NodeWidget> {
             key: widget.node.key,
             clipBehavior: Clip.none,
             children: [
-              Container(decoration: widget.node.builtStyle.decoration),
+              Container(
+                //TODO find a way to add padding
+                decoration: widget.node.builtStyle.decoration.copyWith(
+                  color: const Color(0xFF322F35),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
+                    bottomLeft: Radius.circular(8),
+                    bottomRight: Radius.circular(8),
+                  ),
+                  border: Border.all(color: const Color(0xffDDE0E1), width: 1),
+                ),
+              ),
               ...widget.node.ports.entries.map(
                 (entry) => _buildPortIndicator(entry.value),
               ),
@@ -727,10 +752,10 @@ class _NodeWidgetState extends State<NodeWidget> {
                       : _NodeHeaderWidget(
                           nodeDisplayName: widget.node.prototype.displayName,
                           style: widget.node.builtHeaderStyle,
-                          onToggleCollapse: () =>
-                              widget.controller.toggleCollapseSelectedNodes(
+                          onToggleCollapse: () => {},
+                          /*  widget.controller.toggleCollapseSelectedNodes(
                             !widget.node.state.isCollapsed,
-                          ),
+                          ), */ // TODO remove toggleCollapse
                         ),
                   Offstage(
                     offstage: widget.node.state.isCollapsed,
@@ -754,6 +779,7 @@ class _NodeWidgetState extends State<NodeWidget> {
 
   Widget _buildPortIndicator(PortInstance port) {
     return Positioned.fill(
+      //Todo fix port position
       child: CustomPaint(
         painter: _PortSymbolPainter(
           position: port.offset,
@@ -815,6 +841,7 @@ class _NodeWidgetState extends State<NodeWidget> {
 }
 
 class _NodeHeaderWidget extends StatelessWidget {
+  //TODO responsabile creazione widget per il builder
   final FlNodeHeaderStyle style;
   final String nodeDisplayName;
   final VoidCallback onToggleCollapse;
@@ -832,11 +859,20 @@ class _NodeHeaderWidget extends StatelessWidget {
       decoration: style.decoration,
       child: Row(
         children: [
-          InkWell(
+/*           InkWell( TODO remove collapse icon
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onTap: onToggleCollapse,
             child: Icon(style.icon, color: Colors.white, size: 20),
+          ), */
+          CircleAvatar(
+            backgroundColor: style.backgroundColorIconContainer,
+            radius: 16,
+            child: Icon(
+              style.iconAvatar,
+              color: style.iconColor,
+              size: 16,
+            ),
           ),
           const SizedBox(width: 8),
           Flexible(
@@ -858,6 +894,7 @@ class _PortSymbolPainter extends CustomPainter {
   final PortDirection direction;
   static const double portSize = 4;
   static const double hitBoxSize = 16;
+  final PaintingStyle styleFillOrStroke = PaintingStyle.stroke;
 
   _PortSymbolPainter({
     required this.position,
@@ -869,7 +906,8 @@ class _PortSymbolPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = style.color
-      ..style = PaintingStyle.fill;
+      ..style = styleFillOrStroke
+      ..strokeWidth = 2;
 
     switch (style.shape) {
       case FlPortShape.circle:
@@ -878,11 +916,32 @@ class _PortSymbolPainter extends CustomPainter {
       case FlPortShape.triangle:
         _paintTriangle(canvas, paint);
         break;
+      case FlPortShape.square:
+        _paintSquare(canvas, paint, styleFillOrStroke == PaintingStyle.fill);
     }
 
     if (kDebugMode) {
       _paintDebugHitBox(canvas);
     }
+  }
+
+  void _paintSquare(Canvas canvas, Paint basePaint, bool isFilled) {
+    //TODO add is filled also in _paintCircle e _paintTriangle
+    // Creiamo un nuovo Paint per evitare modifiche al basePaint originale
+    final paint = Paint()
+      ..color = basePaint.color
+      ..strokeWidth = basePaint.strokeWidth
+      ..style = isFilled ? PaintingStyle.fill : PaintingStyle.stroke;
+
+    // Creazione del rettangolo
+    final rect = Rect.fromCenter(
+      center: position,
+      width: portSize * 2,
+      height: portSize * 2,
+    );
+
+    // Disegno del rettangolo
+    canvas.drawRect(rect, paint);
   }
 
   void _paintCircle(Canvas canvas, Paint paint) {
@@ -902,7 +961,7 @@ class _PortSymbolPainter extends CustomPainter {
 
   void _paintDebugHitBox(Canvas canvas) {
     final hitBoxPaint = Paint()
-      ..color = Colors.red
+      ..color = const Color.fromARGB(0, 244, 67, 54) // TODO removed hitbox
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
 

@@ -1,16 +1,14 @@
 import 'dart:ui' as ui;
 import 'dart:ui';
 
+import 'package:fl_nodes/src/widgets/node.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import 'package:fl_nodes/src/widgets/node.dart';
-
 import '../core/controllers/node_editor/core.dart';
 import '../core/models/entities.dart';
 import '../core/models/styles.dart';
-
 import 'builders.dart';
 
 class NodeDrawData {
@@ -671,6 +669,48 @@ class NodeEditorRenderBox extends RenderBox
     canvas.drawPath(path, paint);
   }
 
+  void drawArrowHead(
+    Canvas canvas,
+    Offset from,
+    Offset to, {
+    double tipLength = 10.0,
+    double tipWidth = 16.0,
+    Color color = const Color(0xFF000000),
+    double strokeWidth = 2.0,
+  }) {
+    // Determina la direzione in base alle coordinate x:
+    // se to.dx è maggiore di from.dx, la freccia punta a destra,
+    // altrimenti a sinistra.
+    final isRight = to.dx >= from.dx;
+    // La coordinata y per la testa è quella del punto "to"
+    final y = to.dy;
+
+    // Creiamo il Path che rappresenta il triangolo (testa della freccia)
+    final arrowPath = Path()
+      ..moveTo(to.dx, to.dy); // il vertice della freccia (punta)
+
+    if (isRight) {
+      // Partendo da 'to' (la punta), disegniamo due linee separate:
+      arrowPath
+        ..moveTo(to.dx, y)
+        ..lineTo(to.dx - tipLength, y - tipWidth / 2)
+        ..moveTo(to.dx, y)
+        ..lineTo(to.dx - tipLength, y + tipWidth / 2);
+    } else {
+      arrowPath
+        ..moveTo(to.dx, y)
+        ..lineTo(to.dx + tipLength, y - tipWidth / 2)
+        ..moveTo(to.dx, y)
+        ..lineTo(to.dx + tipLength, y + tipWidth / 2);
+    }
+    // Disegna la testa della freccia
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke;
+    canvas.drawPath(arrowPath, paint);
+  }
+
   void _paintStraightLink(
     Canvas canvas,
     LinkDrawData drawData,
@@ -699,6 +739,10 @@ class NodeEditorRenderBox extends RenderBox
       Rect.fromPoints(drawData.outPortOffset, drawData.inPortOffset),
     );
 
+    final from = drawData.outPortOffset;
+    final to = drawData.inPortOffset;
+    final color = drawData.linkStyle.gradient.colors.first;
+
     final Paint gradientPaint = Paint()
       ..shader = shader
       ..style = PaintingStyle.stroke
@@ -711,6 +755,8 @@ class NodeEditorRenderBox extends RenderBox
       ..lineTo(midX, drawData.outPortOffset.dy)
       ..lineTo(midX, drawData.inPortOffset.dy)
       ..lineTo(drawData.inPortOffset.dx, drawData.inPortOffset.dy);
+
+    drawArrowHead(canvas, from, to, color: color);
 
     canvas.drawPath(path, gradientPaint);
   }
