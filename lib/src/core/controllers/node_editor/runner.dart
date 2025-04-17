@@ -18,7 +18,7 @@ typedef OnExecute = Future<void> Function(
 /// A class that manages the execution of the node editor graph.
 ///
 /// NOTE: This class is still in development and there are performance improvements to be made.
-class FlNodeEditorRunner {
+class FlNodeEditorRunner { // TODO questa classe non ci interessa per adesso, non abbiamo bisogno di fare simulazioni
   final FlNodeEditorController controller;
   Map<String, NodeInstance> _nodes = {};
   Map<String, Set<String>> _dataDeps = {};

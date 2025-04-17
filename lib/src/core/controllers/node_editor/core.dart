@@ -27,6 +27,9 @@ import 'utils.dart';
 /// The controller also provides an event bus for the node editor, allowing
 /// different parts of the application to communicate with each other by
 /// sending and receiving events.
+///
+/// TODO Classe orchestratrice responsabile di instaziare tutti i controllori
+///  principali, viene instanziata a sua volta nel main del progetto esempio
 class FlNodeEditorController {
   FlNodeEditorConfig config; // Dynamic, can be changed at runtime
   final FlNodeEditorStyle style; // Static, cannot be changed at runtime

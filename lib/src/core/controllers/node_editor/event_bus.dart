@@ -10,7 +10,7 @@ import 'package:fl_nodes/src/core/models/events.dart';
 /// receiving events.
 ///
 /// Events can object instances should extend the [NodeEditorEvent] class.
-class NodeEditorEventBus {
+class NodeEditorEventBus { // TODO controller per la gestione globale degli eventi , viene chiamato da FlNodeEditorController
   final _streamController = StreamController<NodeEditorEvent>.broadcast();
 
   /// Emits an event to the event bus.

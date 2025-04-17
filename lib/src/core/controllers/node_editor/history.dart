@@ -9,7 +9,7 @@ import 'core.dart';
 /// [kMaxEventRedoHistory] respectively.
 ///
 /// The history is updated whenever an undoable event is triggered.
-class FlNodeEditorHistory {
+class FlNodeEditorHistory { // TODO classe responsabile della gestione di undo e redo
   final FlNodeEditorController controller;
 
   bool _isTraversingHistory = false;

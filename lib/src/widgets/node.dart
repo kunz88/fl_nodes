@@ -22,6 +22,9 @@ typedef _TempLink = ({String nodeId, String portId});
 /// It now ensures that fields (regardless of whether a custom fieldBuilder is used)
 /// still respond to tap events in the same way as before.
 class NodeWidget extends StatefulWidget {
+  // TODO qui trovi tutti i componenti legati al nodo
+// compresi i costum painters che andranno a disegnare le porte , ho avuto difficoltà a capire come costumizzarla anche se
+// vengono passati come parametri della classe diversi builder per la creazione di layout
   final FlNodeEditorController controller;
   final NodeInstance node;
   final FlNodeHeaderBuilder? headerBuilder;
@@ -308,6 +311,7 @@ class _NodeWidgetState extends State<NodeWidget> {
       children: [
         Flexible(
           child: Text(
+            // TODO aggiungere parametri così da modificare lo stile del testo in fase di creazione dei componenti custom
             port.prototype.displayName.toLowerCase(),
             style: const TextStyle(
               color: Color(0xff545964),
@@ -324,6 +328,7 @@ class _NodeWidgetState extends State<NodeWidget> {
   }
 
   List<Widget> _generateLayout() {
+    // TODO responsabile della creazione del contenitore dei label delle porte
     final inPorts = widget.node.ports.values
         .where((port) => port.prototype.direction == PortDirection.input)
         .toList();
@@ -364,7 +369,7 @@ class _NodeWidgetState extends State<NodeWidget> {
     ];
   }
 
-/*   void _showFieldEditorOverlay(
+/*   void _showFieldEditorOverlay( //TODO removed field because we don't need it
     String nodeId,
     FieldInstance field,
     TapDownDetails details,
@@ -712,7 +717,6 @@ class _NodeWidgetState extends State<NodeWidget> {
     if (widget.nodeBuilder != null) {
       return widget.nodeBuilder!(context, widget.node);
     }
-
     return controlsWrapper(
       IntrinsicHeight(
         child: IntrinsicWidth(
@@ -723,7 +727,6 @@ class _NodeWidgetState extends State<NodeWidget> {
               Container(
                 //TODO find a way to add padding
                 decoration: widget.node.builtStyle.decoration.copyWith(
-                  color: const Color(0xFF322F35),
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(8),
                     topRight: Radius.circular(8),
@@ -780,6 +783,8 @@ class _NodeWidgetState extends State<NodeWidget> {
   Widget _buildPortIndicator(PortInstance port) {
     return Positioned.fill(
       //Todo fix port position
+      // questo metodo è il responsabile della creazione delle porte
+      //non riesco a capire come spostare le porte nella posizione giusta
       child: CustomPaint(
         painter: _PortSymbolPainter(
           position: port.offset,
@@ -927,6 +932,7 @@ class _PortSymbolPainter extends CustomPainter {
 
   void _paintSquare(Canvas canvas, Paint basePaint, bool isFilled) {
     //TODO add is filled also in _paintCircle e _paintTriangle
+    // ho creato questo painer per aggiungere una nuova porta a forma di quadrato
     // Creiamo un nuovo Paint per evitare modifiche al basePaint originale
     final paint = Paint()
       ..color = basePaint.color

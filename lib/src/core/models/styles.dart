@@ -1,7 +1,7 @@
 import 'package:fl_nodes/src/core/models/entities.dart';
 import 'package:flutter/material.dart';
 
-class FlGridStyle {
+class FlGridStyle { // TODO classi per la costumizzazione dei nodi, delle freccie e della griglia
   final double gridSpacingX;
   final double gridSpacingY;
   final double lineWidth;

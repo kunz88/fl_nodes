@@ -102,6 +102,7 @@ class NodeEditorRenderObjectWidget extends MultiChildRenderObjectWidget {
 
   @override
   void updateRenderObject(
+    // TODO this method rebuild the ui
     BuildContext context,
     NodeEditorRenderBox renderObject,
   ) {
@@ -394,6 +395,7 @@ class NodeEditorRenderBox extends RenderBox
 
   @override
   void performLayout() {
+    // TODO this method is used to get the costraints of the box and determin the dimentions
     size = constraints.biggest;
 
     // If the child has not been laid out yet, we need to layout it.
@@ -670,6 +672,7 @@ class NodeEditorRenderBox extends RenderBox
   }
 
   void drawArrowHead(
+    //TODO qui ho aggiunto il painter per la creazione della testa della freccia
     Canvas canvas,
     Offset from,
     Offset to, {

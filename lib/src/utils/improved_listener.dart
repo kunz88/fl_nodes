@@ -1,7 +1,7 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
-class ImprovedListener extends StatefulWidget {
+class ImprovedListener extends StatefulWidget { //TODO responsabile della gestione degli eventi del pointer
   final Widget child;
   final PointerDownEventListener? onPointerPressed;
   final PointerMoveEventListener? onPointerMoved;

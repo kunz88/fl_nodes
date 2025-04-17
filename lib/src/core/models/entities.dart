@@ -96,7 +96,7 @@ class TempLink {
 enum PortDirection { input, output }
 
 enum PortType { data, control }
-
+//TODO sezione definizione tipi di porte
 /// A port prototype is the blueprint for a port instance.
 ///
 /// It defines the name, data type, direction, and if it allows multiple links.

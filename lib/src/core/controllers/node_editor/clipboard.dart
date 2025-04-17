@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-
 import 'package:uuid/uuid.dart';
 
 import '../../../constants.dart';
@@ -10,7 +9,6 @@ import '../../models/events.dart';
 import '../../utils/json_extensions.dart';
 import '../../utils/renderbox.dart';
 import '../../utils/snackbar.dart';
-
 import 'core.dart';
 import 'event_bus.dart';
 import 'utils.dart';
@@ -19,6 +17,7 @@ import 'utils.dart';
 ///
 /// The clipboard operations include copying, pasting, and cutting nodes.
 class FlNodeEditorClipboard {
+  // TODO questa classe gestisce copia ed incolla
   final FlNodeEditorController controller;
 
   NodeEditorEventBus get eventBus => controller.eventBus;
